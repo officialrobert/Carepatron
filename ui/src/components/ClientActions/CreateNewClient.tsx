@@ -58,26 +58,50 @@ const CreateNewClient = () => {
 			email: '',
 			phoneNumber: '',
 		});
-		setInputError({
-			firstName: '',
-			lastName: '',
-			email: '',
-			phoneNumber: '',
-		});
 		setCreateNewClientActiveStep(CreateNewClientStep.PersonalDetails);
+		clearError();
+	};
+
+	/**
+	 * Showing error is better UX-
+	 *  since you want to inform users what step they're in and what went wrong
+	 */
+	const checkInputError = () => {
+		let updatedInputError = {};
+
+		if (!newClientInputForm?.firstName) {
+			updatedInputError = { firstName: 'First name is required.' };
+		}
+
+		if (!newClientInputForm?.lastName) {
+			updatedInputError = { ...updatedInputError, lastName: 'Last name is required.' };
+		}
+
+		if (createNewClientActiveStep === CreateNewClientStep.ContactDetails) {
+			if (!newClientInputForm?.email) {
+				updatedInputError = { ...updatedInputError, email: 'Email is required.' };
+			} else if (!isCorrectEmailFormat(newClientInputForm?.email)) {
+				updatedInputError = { ...updatedInputError, email: 'Invalid email format.' };
+			}
+
+			if (!isCorrectPhoneNumberFormat(newClientInputForm?.phoneNumber)) {
+				updatedInputError = { ...updatedInputError, phoneNumber: 'Invalid phone number.' };
+			}
+		}
+
+		if (!isEmpty(updatedInputError)) {
+			setInputError({ ...inputError, ...updatedInputError });
+			return true;
+		}
+
+		return false;
 	};
 
 	/**
 	 * Navigate to 2nd & final step
 	 */
 	const proceedToContactDetails = () => {
-		if (!newClientInputForm?.firstName) {
-			setInputError({ ...inputError, firstName: 'First name is required.' });
-		}
-
-		if (!newClientInputForm?.lastName) {
-			setInputError({ ...inputError, firstName: 'Last name is required.' });
-		}
+		checkInputError();
 
 		if (newClientInputForm?.firstName && newClientInputForm?.lastName) {
 			setCreateNewClientActiveStep(CreateNewClientStep.ContactDetails);
@@ -99,7 +123,7 @@ const CreateNewClient = () => {
 	 * Submit new client
 	 */
 	const proceedSubmit = async () => {
-		if (submitted) {
+		if (submitted || checkInputError()) {
 			return;
 		}
 
@@ -130,7 +154,17 @@ const CreateNewClient = () => {
 	const onFormInputChange = (property: string, val: string) => {
 		if (property) {
 			setNewClientInputForm({ ...newClientInputForm, [property]: val });
+			clearError();
 		}
+	};
+
+	const clearError = () => {
+		setInputError({
+			firstName: '',
+			lastName: '',
+			email: '',
+			phoneNumber: '',
+		});
 	};
 
 	return (
@@ -218,6 +252,8 @@ const CreateNewClient = () => {
 								<Box sx={{ width: '100%', flexDirection: 'column', marginTop: '16px' }}>
 									<p>First name</p>
 									<TextField
+										error={!isEmpty(inputError?.firstName)}
+										helperText={inputError?.firstName}
 										fullWidth
 										hiddenLabel
 										value={newClientInputForm.firstName}
@@ -228,6 +264,8 @@ const CreateNewClient = () => {
 								<Box sx={{ width: '100%', flexDirection: 'column', marginTop: '16px' }}>
 									<p>Last name</p>
 									<TextField
+										error={!isEmpty(inputError?.lastName)}
+										helperText={inputError?.lastName}
 										fullWidth
 										hiddenLabel
 										value={newClientInputForm.lastName}
@@ -242,6 +280,8 @@ const CreateNewClient = () => {
 								<Box sx={{ width: '100%', flexDirection: 'column', marginTop: '16px' }}>
 									<p>Email</p>
 									<TextField
+										error={!isEmpty(inputError?.email)}
+										helperText={inputError?.email}
 										fullWidth
 										hiddenLabel
 										disabled={submitted}
@@ -252,6 +292,8 @@ const CreateNewClient = () => {
 								<Box sx={{ width: '100%', flexDirection: 'column', marginTop: '16px' }}>
 									<p>Phone number</p>
 									<TextField
+										error={!isEmpty(inputError?.phoneNumber)}
+										helperText={inputError?.phoneNumber}
 										fullWidth
 										hiddenLabel
 										disabled={submitted}
