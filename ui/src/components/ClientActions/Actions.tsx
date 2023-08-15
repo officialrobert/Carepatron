@@ -3,6 +3,7 @@ import { ACTIONS, StateContext } from '../../store/DataProvider';
 import { InputAdornment, OutlinedInput } from '@mui/material';
 import { SearchTwoTone as SearchTwoToneIcon } from '@mui/icons-material';
 import CreateNewClient from './CreateNewClient';
+import { filter, includes, toLower, toString } from 'lodash';
 
 const ClientActions = () => {
 	const { state, dispatch } = useContext(StateContext);
@@ -10,9 +11,9 @@ const ClientActions = () => {
 	const [searchInput, setSearchInput] = useState('');
 
 	const onSearchClientInput = (e: ChangeEvent<HTMLInputElement>) => {
-		const value = e?.target?.value;
-		const filteredClients = clients.filter((client) =>
-			`${client?.firstName || ''} ${client?.lastName || ''}`.toLowerCase()?.includes(value)
+		const value = toString(e?.target?.value);
+		const filteredClients = filter(clients, (client) =>
+			includes(toLower(`${client?.firstName || ''} ${client?.lastName || ''}`), value)
 		);
 
 		setSearchInput(value);

@@ -1,0 +1,27 @@
+.CreateNewClientStepLabel {
+	box-sizing: border-box;
+}
+
+.CreateNewClientStepLabelActive {
+	svg {
+		circle {
+			fill: #345fff;
+		}
+	}
+}
+
+.CreateNewClientStepLabelCompleted {
+	svg {
+		path {
+			fill: #008025;
+		}
+	}
+}
+
+.LoadingButtonSubmit {
+	svg {
+		circle {
+			color: #fff;
+		}
+	}
+}
