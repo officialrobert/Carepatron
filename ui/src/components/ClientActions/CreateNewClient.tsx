@@ -12,6 +12,7 @@ import {
 	Step,
 	StepLabel,
 	TextField,
+	Alert,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { ChevronLeft, Close as CloseIcon } from '@mui/icons-material';
@@ -29,6 +30,7 @@ const CreateNewClient = () => {
 	const [showNewClientDialog, setShowNewClientDialog] = useState(false);
 	const [createNewClientActiveStep, setCreateNewClientActiveStep] = useState(CreateNewClientStep.PersonalDetails);
 
+	const [showSuccess, setShowSuccess] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
 
 	const [newClientInputForm, setNewClientInputForm] = useState({
@@ -139,12 +141,16 @@ const CreateNewClient = () => {
 
 			if (!isEmpty(clientRes)) {
 				// success
-
 				// show recently created client info at top of the list
 				dispatch({ type: ACTIONS.FETCH_ALL_CLIENTS, data: [clientRes, ...clients] });
 
 				// close dialog
 				handleCreateNewClientDialogClose();
+
+				// toggle toast
+				setShowSuccess(true);
+				await wait(1000);
+				setShowSuccess(false);
 			}
 		} catch (err) {
 			setSubmitted(false);
@@ -177,7 +183,6 @@ const CreateNewClient = () => {
 			>
 				<p style={{ color: '#fff', fontSize: '16px' }}>Create new client</p>
 			</Button>
-
 			<Dialog open={showNewClientDialog} onClose={handleCreateNewClientDialogClose}>
 				<DialogTitle
 					sx={{
@@ -377,6 +382,12 @@ const CreateNewClient = () => {
 					</DialogActions>
 				</DialogContent>
 			</Dialog>
+
+			{showSuccess && (
+				<Alert className='CreateNewClientSuccessAlert' severity='success' color='info'>
+					Successfully Created!
+				</Alert>
+			)}
 		</>
 	);
 };
