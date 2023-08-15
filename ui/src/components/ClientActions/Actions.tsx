@@ -13,7 +13,7 @@ const ClientActions = () => {
 	const onSearchClientInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const value = toString(e?.target?.value);
 		const filteredClients = filter(clients, (client) =>
-			includes(toLower(`${client?.firstName || ''} ${client?.lastName || ''}`), value)
+			includes(toLower(`${client?.firstName || ''} ${client?.lastName || ''}`), toLower(value))
 		);
 
 		setSearchInput(value);
