@@ -1,15 +1,23 @@
-import { Routes, Route } from 'react-router-dom';
 import DataProvider from './store/DataProvider';
 import Clients from './pages/Clients';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+
+const router = createBrowserRouter([
+	{
+		path: '/',
+		element: <Clients />,
+	},
+	{
+		path: '/Clients',
+		element: <Clients />,
+	},
+]);
 
 export default function App() {
 	return (
 		<div className='App'>
 			<DataProvider>
-				<Routes>
-					<Route path='/' element={<Clients />} />
-					<Route path='/Clients' element={<Clients />} />
-				</Routes>
+				<RouterProvider router={router} />
 			</DataProvider>
 		</div>
 	);
