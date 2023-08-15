@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { StateContext } from '../store/DataProvider';
+import { useContext, ChangeEvent, useState } from 'react';
+import { ACTIONS, StateContext } from '../store/DataProvider';
 import Button from '@mui/material/Button';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -7,7 +7,26 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 const Actions = () => {
 	const { state, dispatch } = useContext(StateContext);
-	const { clients } = state;
+	const { clients = [] } = state;
+	const [searchInput, setSearchInput] = useState('');
+
+	const onSearchClientInput = (e: ChangeEvent<HTMLInputElement>) => {
+		const value = e?.target?.value;
+		const filteredClients = clients.filter((client) =>
+			`${client?.firstName || ''} ${client?.lastName || ''}`.toLowerCase()?.includes(value)
+		);
+
+		setSearchInput(value);
+
+		if (value) {
+			dispatch({ type: ACTIONS.SHOW_FILTERED, data: true });
+		} else {
+			dispatch({ type: ACTIONS.SHOW_FILTERED, data: false });
+		}
+
+		// Normally we should hit an API endpoint for searching the whole database
+		dispatch({ type: ACTIONS.SEARCH_ALL_CLIENTS, data: !value ? [] : filteredClients });
+	};
 
 	return (
 		<div
@@ -31,6 +50,8 @@ const Actions = () => {
 						<SearchTwoToneIcon />
 					</InputAdornment>
 				}
+				value={searchInput}
+				onChange={onSearchClientInput}
 				placeholder='Search clients...'
 			/>
 

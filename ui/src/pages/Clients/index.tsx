@@ -1,6 +1,6 @@
-import { memo, useContext, useEffect } from 'react';
+import { memo, useContext, useEffect, useMemo } from 'react';
 import { Paper, Typography } from '@mui/material';
-import { StateContext } from '../../store/DataProvider';
+import { ACTIONS, StateContext } from '../../store/DataProvider';
 import Page from '../../components/Page';
 import ClientTable from './ClientTable';
 import { getClients } from '../../services/api';
@@ -8,11 +8,19 @@ import Actions from '../Actions';
 
 function Clients() {
 	const { state, dispatch } = useContext(StateContext);
-	const { clients } = state;
+	const { clients, filteredClients, showFiltered } = state;
 
+	const clientsToDisplay = useMemo(
+		() => (showFiltered ? filteredClients : clients),
+		[clients, filteredClients, showFiltered]
+	);
+
+	/**
+	 * Fetch initial clients
+	 */
 	useEffect(() => {
 		getClients().then((clients) => {
-			dispatch({ type: 'FETCH_ALL_CLIENTS', data: clients });
+			dispatch({ type: ACTIONS.FETCH_ALL_CLIENTS, data: clients });
 		});
 	}, [dispatch]);
 
@@ -24,7 +32,7 @@ function Clients() {
 			<Actions />
 
 			<Paper sx={{ margin: 'auto', marginTop: 3 }}>
-				<ClientTable clients={clients} />
+				<ClientTable clients={clientsToDisplay} />
 			</Paper>
 		</Page>
 	);
