@@ -1,0 +1,9 @@
+.PageComponent {
+	max-width: 700px;
+}
+
+@media screen and (max-width: 705px) {
+	.PageComponent {
+		max-width: 94vw;
+	}
+}

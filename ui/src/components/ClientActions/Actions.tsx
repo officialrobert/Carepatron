@@ -4,6 +4,7 @@ import { InputAdornment, OutlinedInput } from '@mui/material';
 import { SearchTwoTone as SearchTwoToneIcon } from '@mui/icons-material';
 import CreateNewClient from './CreateNewClient';
 import { filter, includes, toLower, toString } from 'lodash';
+import './Actions.scss';
 
 export const SearchClientInputDomId = 'SearchClientInputDomId';
 
@@ -48,6 +49,7 @@ const ClientActions = () => {
 					background: '#fff',
 					borderRadius: '6px',
 				}}
+				className='SearchInput'
 				type={'text'}
 				endAdornment={
 					<InputAdornment position='end'>

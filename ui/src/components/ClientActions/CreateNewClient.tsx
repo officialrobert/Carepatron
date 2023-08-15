@@ -186,11 +186,19 @@ const CreateNewClient = () => {
 			<Button
 				variant='contained'
 				disableRipple
-				style={{ height: '50px', textTransform: 'none', borderRadius: '8px', background: '#345FFF' }}
+				style={{
+					height: '46px',
+					boxSizing: 'border-box',
+					textTransform: 'none',
+					borderRadius: '8px',
+					background: '#345FFF',
+				}}
+				className='CreateNewClientButton'
 				onClick={() => setShowNewClientDialog(true)}
 			>
-				<p style={{ color: '#fff', fontSize: '16px' }}>Create new client</p>
+				<p style={{ color: '#fff' }}>Create new client</p>
 			</Button>
+
 			<Dialog open={showNewClientDialog} onClose={handleCreateNewClientDialogClose}>
 				<DialogTitle
 					sx={{
