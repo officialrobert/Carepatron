@@ -13,10 +13,11 @@ import {
 	StepLabel,
 	TextField,
 	Alert,
+	FormHelperText,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { ChevronLeft, Close as CloseIcon } from '@mui/icons-material';
-import { isEmpty, map, size } from 'lodash';
+import { includes, isEmpty, map, size, toLower } from 'lodash';
 import { isCorrectEmailFormat, isCorrectPhoneNumberFormat, wait } from '../../utils';
 import { createClient } from '../../services/api';
 import { CreateNewClientStep, CreateNewClientStepsLabel } from '../../types';
@@ -32,6 +33,7 @@ const CreateNewClient = () => {
 
 	const [showSuccess, setShowSuccess] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
+	const [errorMessage, setErrorMessage] = useState('');
 
 	const [newClientInputForm, setNewClientInputForm] = useState({
 		firstName: '',
@@ -60,6 +62,7 @@ const CreateNewClient = () => {
 			email: '',
 			phoneNumber: '',
 		});
+		setErrorMessage('');
 		setCreateNewClientActiveStep(CreateNewClientStep.PersonalDetails);
 		clearError();
 	};
@@ -130,6 +133,7 @@ const CreateNewClient = () => {
 		}
 
 		setSubmitted(true);
+		setErrorMessage('');
 
 		try {
 			const { firstName, lastName, phoneNumber, email } = newClientInputForm;
@@ -152,7 +156,11 @@ const CreateNewClient = () => {
 				await wait(1000);
 				setShowSuccess(false);
 			}
-		} catch (err) {
+		} catch (err: any) {
+			if (includes(toLower(err?.message as string), 'network')) {
+				setErrorMessage('Check your network connection.');
+			}
+
 			setSubmitted(false);
 		}
 	};
@@ -309,6 +317,21 @@ const CreateNewClient = () => {
 							</>
 						)}
 					</Box>
+
+					{!isEmpty(errorMessage) && (
+						<Box
+							sx={{
+								width: '100%',
+								margin: '16px 0',
+								padding: '0 8px',
+								boxSizing: 'border-box',
+							}}
+						>
+							<FormHelperText style={{ color: 'red', boxSizing: 'border-box' }}>
+								{errorMessage}
+							</FormHelperText>
+						</Box>
+					)}
 
 					<DialogActions
 						style={{
