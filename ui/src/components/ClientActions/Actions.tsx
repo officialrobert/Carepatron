@@ -5,6 +5,8 @@ import { SearchTwoTone as SearchTwoToneIcon } from '@mui/icons-material';
 import CreateNewClient from './CreateNewClient';
 import { filter, includes, toLower, toString } from 'lodash';
 
+export const SearchClientInputDomId = 'SearchClientInputDomId';
+
 const ClientActions = () => {
 	const { state, dispatch } = useContext(StateContext);
 	const { clients = [] } = state;
@@ -39,6 +41,8 @@ const ClientActions = () => {
 			}}
 		>
 			<OutlinedInput
+				id={SearchClientInputDomId}
+				data-testid={SearchClientInputDomId}
 				style={{
 					height: '48px',
 					background: '#fff',
