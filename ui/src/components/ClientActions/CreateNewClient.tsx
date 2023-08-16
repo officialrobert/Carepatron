@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { DialogEnum } from '../../types';
 import { DialogProviderActions, DialogStateContext } from '../../store/DialogProvider';
 
-import ConfirmButton from '../Confirm-Button';
+import ConfirmButton from '../ConfirmButton';
 
 const CreateNewClient = () => {
 	const { dispatch } = useContext(DialogStateContext);

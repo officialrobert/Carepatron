@@ -1,6 +1,6 @@
 import { Box, TextField, Alert } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { StyledDialog, StyledDialogActions, StyledDialogContent, StyledDialogTitle } from '../Custom-Dialog';
+import { StyledDialog, StyledDialogActions, StyledDialogContent, StyledDialogTitle } from '../Dialog';
 import { ACTIONS, StateContext } from '../../store/DataProvider';
 import { includes, isEmpty, map, toLower } from 'lodash';
 import { CreateNewClientStep, CreateNewClientStepsLabel, DialogEnum } from '../../types';
@@ -14,9 +14,9 @@ import {
 	styleFlexStartVerticalElement,
 	styleHorizontalFlexEnd,
 } from '../../constants';
-import { StyledStep, StyledStepLabel, StyledStepper } from '../Custom-Stepper';
+import { StyledStep, StyledStepLabel, StyledStepper } from '../Stepper';
 
-import ConfirmButton from '../Confirm-Button';
+import ConfirmButton from '../ConfirmButton';
 import FormErrorMessage from '../FormErrorMessage';
 import CloseIconButton from '../CloseIconButton';
 import './CreateNewClientDialog.scss';
