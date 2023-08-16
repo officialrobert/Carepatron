@@ -58,13 +58,18 @@ export function wait(ms: number) {
  * @param availableClients
  * @param query
  */
-export const searchClients = (availableClients: IClient[], query = '') => {
+export const searchClients = (availableClients: IClient[], query: string) => {
 	const filtered = [];
 	const sanitizedQuery = toLower(trim(query));
 
 	for (let i = 0; i < size(availableClients); i++) {
 		const client = availableClients[i];
 		const matchString = toLower(`${client?.firstName} ${client?.lastName}`);
+
+		if (matchString === sanitizedQuery) {
+			filtered.push(client);
+			break;
+		}
 
 		if (includes(matchString, sanitizedQuery)) {
 			filtered.push(client);

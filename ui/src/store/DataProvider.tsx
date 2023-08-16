@@ -1,11 +1,13 @@
-import React, { createContext, useReducer } from 'react';
-import StyledAlert from '../components/Alert';
+import { Dispatch, ReactNode, createContext, useReducer } from 'react';
 import { createClient } from '../services/api';
 import { isEmpty } from 'lodash';
 import { wait } from '../utils';
+import { ToastEnum } from '../types';
+
+import StyledAlert from '../components/Alert';
 
 const initialState: IApplicationState = {
-	showSuccessToast: false,
+	showToast: ToastEnum.none,
 	toastMessage: '',
 	showFiltered: false,
 	clients: [],
@@ -14,8 +16,10 @@ const initialState: IApplicationState = {
 
 export const StateContext = createContext<{
 	state: IApplicationState;
-	dispatch: React.Dispatch<Action>;
+	dispatch: Dispatch<Action>;
 	createNewClient: <T>(client: IClient) => Promise<T | any>;
+	openToast: (type: ToastEnum, message: string) => void;
+	hideToast: () => void;
 }>(
 	// @ts-ignore
 	null
@@ -25,7 +29,7 @@ export enum ACTIONS {
 	FETCH_ALL_CLIENTS = 'FETCH_ALL_CLIENTS',
 	SEARCH_ALL_CLIENTS = 'SEARCH_ALL_CLIENTS',
 	SHOW_FILTERED = 'SHOW_FILTERED',
-	SHOW_SUCCESS_TOAST = 'SHOW_SUCCESS_TOAST',
+	SHOW_TOAST = 'SHOW_TOAST',
 	SET_TOAST_MESSAGE = 'SET_TOAST_MESSAGE',
 }
 
@@ -42,8 +46,8 @@ const reducer = (state: IApplicationState, action: Action) => {
 			return { ...state, filteredClients: action.data };
 		case ACTIONS.SHOW_FILTERED:
 			return { ...state, showFiltered: Boolean(action.data) };
-		case ACTIONS.SHOW_SUCCESS_TOAST:
-			return { ...state, showSuccessToast: Boolean(action.data), ...(!action.data && { toastMessage: '' }) };
+		case ACTIONS.SHOW_TOAST:
+			return { ...state, showToast: action.data };
 		case ACTIONS.SET_TOAST_MESSAGE:
 			return { ...state, toastMessage: action.data };
 		default:
@@ -51,10 +55,32 @@ const reducer = (state: IApplicationState, action: Action) => {
 	}
 };
 
-export default function DataProvider({ children }: { children?: React.ReactNode }) {
+export default function DataProvider({ children }: { children?: ReactNode }) {
 	const [state, dispatch] = useReducer(reducer, initialState);
 
-	const { toastMessage, showSuccessToast } = state;
+	const { toastMessage, showToast } = state;
+
+	const openToast = (type: ToastEnum, message: string) => {
+		dispatch({
+			type: ACTIONS.SHOW_TOAST,
+			data: type,
+		});
+		dispatch({
+			type: ACTIONS.SET_TOAST_MESSAGE,
+			data: message,
+		});
+	};
+
+	const hideToast = () => {
+		dispatch({
+			type: ACTIONS.SHOW_TOAST,
+			data: ToastEnum.none,
+		});
+		dispatch({
+			type: ACTIONS.SET_TOAST_MESSAGE,
+			data: '',
+		});
+	};
 
 	const createNewClient = async (client: IClient) => {
 		const { firstName, lastName, phoneNumber, email } = client;
@@ -64,21 +90,9 @@ export default function DataProvider({ children }: { children?: React.ReactNode 
 			// success
 			// show recently created client info at top of the list
 			dispatch({ type: ACTIONS.FETCH_ALL_CLIENTS, data: [clientRes, ...state?.clients] });
-			dispatch({
-				type: ACTIONS.SHOW_SUCCESS_TOAST,
-				data: true,
-			});
-			dispatch({
-				type: ACTIONS.SET_TOAST_MESSAGE,
-				data: true,
-			});
 
-			await wait(1_500);
-
-			dispatch({
-				type: ACTIONS.SHOW_SUCCESS_TOAST,
-				data: false,
-			});
+			openToast(ToastEnum.success, 'Successfully Created!');
+			wait(1_500).then(() => hideToast());
 
 			return clientRes;
 		}
@@ -92,11 +106,13 @@ export default function DataProvider({ children }: { children?: React.ReactNode 
 				state,
 				dispatch,
 				createNewClient,
+				openToast,
+				hideToast,
 			}}
 		>
 			{children}
-			{showSuccessToast && !isEmpty(toastMessage) && (
-				<StyledAlert severity='success' color='info' message={state?.toastMessage} />
+			{!isEmpty(showToast) && showToast !== ToastEnum.none && !isEmpty(toastMessage) && (
+				<StyledAlert severity={showToast} color={showToast} message={toastMessage} />
 			)}
 		</StateContext.Provider>
 	);
