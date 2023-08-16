@@ -5,9 +5,7 @@
 
 ## Demo
 
-
 https://github.com/officialrobert/Carepatron/assets/49491660/de18850d-1fdc-4e5c-b850-293b9201e395
-
 
 # Search
 
@@ -28,9 +26,10 @@ Note: The implementation of search functionality can vary significantly based on
 
 It was written that all form inputs are required, so each input must be validate. For each input that fails, user will get an error message.
 
+# Client's country info
 
+Used Google's `libphonenumber-js` library to validate and fetch phone number metadata.
 
 # How can you ensure the app behaves as you intend it to?
- 
-Unit testing can be helpful in this case. You can begin by checking the `App.test.tsx` file.
 
+Unit testing can be helpful in this case. You can begin by checking the `App.test.tsx` file.
