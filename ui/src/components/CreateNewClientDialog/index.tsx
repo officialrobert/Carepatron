@@ -1,6 +1,5 @@
-import cx from 'classnames';
-import { Box, IconButton, Stepper, Step, StepLabel, TextField, Alert } from '@mui/material';
-import { ArrowBack, Close as CloseIcon } from '@mui/icons-material';
+import { Box, TextField, Alert } from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import { StyledDialog, StyledDialogActions, StyledDialogContent, StyledDialogTitle } from '../Custom-Dialog';
 import { ACTIONS, StateContext } from '../../store/DataProvider';
 import { includes, isEmpty, map, toLower } from 'lodash';
@@ -15,9 +14,11 @@ import {
 	styleFlexStartVerticalElement,
 	styleHorizontalFlexEnd,
 } from '../../constants';
+import { StyledStep, StyledStepLabel, StyledStepper } from '../Custom-Stepper';
 
 import ConfirmButton from '../Confirm-Button';
 import FormErrorMessage from '../FormErrorMessage';
+import CloseIconButton from '../CloseIconButton';
 import './CreateNewClientDialog.scss';
 
 const CreateNewClientDialog = () => {
@@ -132,21 +133,8 @@ const CreateNewClientDialog = () => {
 				<StyledDialogTitle>
 					{!submitted && (
 						<>
-							<p style={{ fontWeight: '500', fontSize: '17px', textAlign: 'start' }}>
-								{' '}
-								Create new client{' '}
-							</p>
-							<IconButton
-								aria-label='Close dialog'
-								onClick={handleCreateNewClientDialogClose}
-								size='medium'
-								sx={{
-									position: 'relative',
-									color: (theme) => theme.palette.grey[500],
-								}}
-							>
-								<CloseIcon />
-							</IconButton>
+							<p style={{ fontWeight: '500', fontSize: '17px', textAlign: 'start' }}>Create new client</p>
+							<CloseIconButton ariaLabel={'Close dialog'} onClick={handleCreateNewClientDialogClose} />
 						</>
 					)}
 				</StyledDialogTitle>
@@ -154,7 +142,7 @@ const CreateNewClientDialog = () => {
 				<StyledDialogContent>
 					<form onSubmit={handleSubmit(proceedSubmit)}>
 						<Box sx={{ width: '100%' }}>
-							<Stepper activeStep={createNewClientActiveStep}>
+							<StyledStepper activeStep={createNewClientActiveStep}>
 								{map(CreateNewClientStepsLabel, (stepInfo) => {
 									const { i18n, step } = stepInfo;
 									const completed =
@@ -165,19 +153,17 @@ const CreateNewClientDialog = () => {
 											!isEmpty(watch('phoneNumber')));
 
 									return (
-										<Step key={i18n} completed={completed}>
-											<StepLabel
-												className={cx('CreateNewClientStepLabel', {
-													CreateNewClientStepLabelCompleted: completed,
-													CreateNewClientStepLabelActive: createNewClientActiveStep === step,
-												})}
+										<StyledStep key={i18n} completed={completed}>
+											<StyledStepLabel
+												active={createNewClientActiveStep === step}
+												completed={completed}
 											>
 												{i18n}
-											</StepLabel>
-										</Step>
+											</StyledStepLabel>
+										</StyledStep>
 									);
 								})}
-							</Stepper>
+							</StyledStepper>
 						</Box>
 						<Box
 							sx={{
@@ -193,6 +179,7 @@ const CreateNewClientDialog = () => {
 										CreateNewClientStep.PersonalDetails === createNewClientActiveStep && !submitted
 											? 'block'
 											: 'none',
+									width: '100%',
 								}}
 							>
 								<Box
@@ -226,7 +213,11 @@ const CreateNewClientDialog = () => {
 							</Box>
 
 							{CreateNewClientStep.ContactDetails === createNewClientActiveStep && !submitted && (
-								<Box>
+								<Box
+									style={{
+										width: '100%',
+									}}
+								>
 									<Box sx={{ marginTop: '16px', ...styleFlexStartVerticalElement }}>
 										<p>Email</p>
 										<TextField

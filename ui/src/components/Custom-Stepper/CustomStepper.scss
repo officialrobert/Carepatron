@@ -1,0 +1,19 @@
+.StyledStepLabel {
+	box-sizing: border-box;
+}
+
+.StyledStepLabelActive {
+	svg {
+		circle {
+			fill: #345fff;
+		}
+	}
+}
+
+.StyledStepLabelCompleted {
+	svg {
+		path {
+			fill: #008025;
+		}
+	}
+}

@@ -33,3 +33,7 @@ Used Google's `libphonenumber-js` library to validate and fetch phone number met
 # How can you ensure the app behaves as you intend it to?
 
 Unit testing can be helpful in this case. You can begin by checking the `App.test.tsx` file.
+
+# Dialog / Modal
+
+Created `DialogProvider` for handling active modals

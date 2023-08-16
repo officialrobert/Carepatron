@@ -3,7 +3,9 @@ import { ACTIONS, StateContext } from '../../store/DataProvider';
 import { InputAdornment, OutlinedInput } from '@mui/material';
 import { SearchTwoTone as SearchTwoToneIcon } from '@mui/icons-material';
 import CreateNewClient from './CreateNewClient';
-import { filter, includes, toLower, toString } from 'lodash';
+import { toString } from 'lodash';
+import { searchClients } from '../../utils';
+import { styleFlexHorizontalSpaceBetween } from '../../constants';
 import './Actions.scss';
 
 export const SearchClientInputDomId = 'SearchClientInputDomId';
@@ -15,10 +17,7 @@ const ClientActions = () => {
 
 	const onSearchClientInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const value = toString(e?.target?.value);
-		const filteredClients = filter(clients, (client) =>
-			includes(toLower(`${client?.firstName || ''} ${client?.lastName || ''}`), toLower(value))
-		);
-
+		const filteredClients = searchClients(clients, value);
 		setSearchInput(value);
 
 		if (value) {
@@ -34,11 +33,8 @@ const ClientActions = () => {
 	return (
 		<div
 			style={{
-				width: '100%',
 				margin: '16px 0',
-				position: 'relative',
-				display: 'flex',
-				justifyContent: 'space-between',
+				...styleFlexHorizontalSpaceBetween,
 			}}
 		>
 			<OutlinedInput

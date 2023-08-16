@@ -1,7 +1,11 @@
-import { isEmpty, isNumber, isString } from 'lodash';
-
+import { includes, isEmpty, isNumber, isString, size, toLower, trim } from 'lodash';
 import parsePhoneNumber, { isPossiblePhoneNumber } from 'libphonenumber-js';
 
+/**
+ * Verify if email is correct format, returns true/false
+ * @param email
+ * @returns
+ */
 export const isCorrectEmailFormat = (email: string) => {
 	const match =
 		// eslint-disable-next-line
@@ -10,12 +14,17 @@ export const isCorrectEmailFormat = (email: string) => {
 	return isString(email) && !isEmpty(email) && match.test(email);
 };
 
+/**
+ * Get phone number metadata, returns null for invalid phone number
+ * @param phoneNumber
+ * @returns
+ */
 export const getPhoneNumberMetadata = (phoneNumber: string) => {
 	try {
 		const phoneNumberParsedInfo = parsePhoneNumber(phoneNumber);
 
 		if (!phoneNumberParsedInfo || !isPossiblePhoneNumber(phoneNumber)) {
-			return false;
+			return null;
 		}
 
 		return {
@@ -23,10 +32,15 @@ export const getPhoneNumberMetadata = (phoneNumber: string) => {
 			internationalFormat: phoneNumberParsedInfo?.formatInternational(),
 		};
 	} catch {
-		return false;
+		return null;
 	}
 };
 
+/**
+ * Timout for n ms
+ * @param ms
+ * @returns
+ */
 export function wait(ms: number) {
 	return new Promise((resolve) => {
 		const _timeout = setTimeout(
@@ -38,3 +52,24 @@ export function wait(ms: number) {
 		);
 	});
 }
+
+/**
+ * Search clients list by firstName/lastName
+ * @param availableClients
+ * @param query
+ */
+export const searchClients = (availableClients: IClient[], query = '') => {
+	const filtered = [];
+	const sanitizedQuery = toLower(trim(query));
+
+	for (let i = 0; i < size(availableClients); i++) {
+		const client = availableClients[i];
+		const matchString = toLower(`${client?.firstName} ${client?.lastName}`);
+
+		if (includes(matchString, sanitizedQuery)) {
+			filtered.push(client);
+		}
+	}
+
+	return filtered;
+};

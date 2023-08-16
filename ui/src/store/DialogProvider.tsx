@@ -30,12 +30,16 @@ const reducer = (state: IDialogState, action: Action) => {
 		case DialogProviderActions.SHOW_DIALOG:
 			return { ...state, showDialog: Boolean(action.data) };
 		case DialogProviderActions.SHOW_DIALOG_TYPE:
-			return { ...state, showDialogType: action.data };
+			return { ...state, showDialogType: action.data || DialogEnum.None };
 		default:
 			return state;
 	}
 };
 
+/**
+ * Show active dialog
+ * To add more dialog types, see 'DialogEnum'
+ */
 export default function DialogProvider({ children }: { children?: ReactNode }) {
 	const [state, dispatch] = useReducer(reducer, initialState);
 
