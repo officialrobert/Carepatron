@@ -1,0 +1,30 @@
+.DialogTitle {
+	padding: 8px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.DialogActions {
+	position: relative;
+	margin-top: 20px;
+}
+
+/** Update dialog content max-width on custom breakpoints **/
+.DialogContent {
+	position: relative;
+	max-width: 480px;
+	width: 90vw;
+}
+
+@media screen and (max-width: 720px) {
+	.DialogContent {
+		max-width: 360px;
+	}
+}
+
+@media screen and (max-width: 460px) {
+	.DialogContent {
+		max-width: 270px;
+	}
+}

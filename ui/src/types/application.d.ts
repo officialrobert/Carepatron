@@ -11,3 +11,8 @@ interface IApplicationState {
 	filteredClients: IClient[];
 	showFiltered: boolean;
 }
+
+interface IDialogState {
+	showDialog: boolean;
+	showDialogType: string;
+}

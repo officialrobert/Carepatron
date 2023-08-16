@@ -7,3 +7,8 @@ export const CreateNewClientStepsLabel = [
 	{ step: 0, i18n: 'Personal details' },
 	{ step: 1, i18n: 'Contact details' },
 ];
+
+export enum DialogEnum {
+	'None' = 'None',
+	'CreateNewClient' = 'CreateNewClient',
+}

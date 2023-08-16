@@ -1,5 +1,6 @@
 import DataProvider from './store/DataProvider';
 import Clients from './pages/Clients';
+import DialogProvider from './store/DialogProvider';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 
@@ -18,7 +19,9 @@ export default function App() {
 	return (
 		<div className='App'>
 			<DataProvider>
-				<RouterProvider router={router} />
+				<DialogProvider>
+					<RouterProvider router={router} />
+				</DialogProvider>
 			</DataProvider>
 		</div>
 	);

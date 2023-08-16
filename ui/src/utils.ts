@@ -11,16 +11,20 @@ export const isCorrectEmailFormat = (email: string) => {
 };
 
 export const getPhoneNumberMetadata = (phoneNumber: string) => {
-	const phoneNumberParsedInfo = parsePhoneNumber(phoneNumber);
+	try {
+		const phoneNumberParsedInfo = parsePhoneNumber(phoneNumber);
 
-	if (!phoneNumberParsedInfo || !isPossiblePhoneNumber(phoneNumber)) {
+		if (!phoneNumberParsedInfo || !isPossiblePhoneNumber(phoneNumber)) {
+			return false;
+		}
+
+		return {
+			phoneNumberParsedInfo,
+			internationalFormat: phoneNumberParsedInfo?.formatInternational(),
+		};
+	} catch {
 		return false;
 	}
-
-	return {
-		phoneNumberParsedInfo,
-		internationalFormat: phoneNumberParsedInfo?.formatInternational(),
-	};
 };
 
 export function wait(ms: number) {
