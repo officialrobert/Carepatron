@@ -18,7 +18,6 @@ import { StyledStep, StyledStepLabel, StyledStepper } from '../Stepper';
 import ConfirmButton from '../ConfirmButton';
 import FormErrorMessage from '../FormErrorMessage';
 import CloseIconButton from '../CloseIconButton';
-import './CreateNewClientDialog.scss';
 
 const CreateNewClientDialog = () => {
 	const { createNewClient } = useContext(StateContext);
