@@ -1,5 +1,7 @@
 import { isEmpty, isNumber, isString } from 'lodash';
 
+import parsePhoneNumber, { isPossiblePhoneNumber } from 'libphonenumber-js';
+
 export const isCorrectEmailFormat = (email: string) => {
 	const match =
 		// eslint-disable-next-line
@@ -8,8 +10,17 @@ export const isCorrectEmailFormat = (email: string) => {
 	return isString(email) && !isEmpty(email) && match.test(email);
 };
 
-export const isCorrectPhoneNumberFormat = (phoneNumber: string) => {
-	return !isEmpty(phoneNumber) && phoneNumber?.startsWith('+');
+export const getPhoneNumberMetadata = (phoneNumber: string) => {
+	const phoneNumberParsedInfo = parsePhoneNumber(phoneNumber);
+
+	if (!phoneNumberParsedInfo || !isPossiblePhoneNumber(phoneNumber)) {
+		return false;
+	}
+
+	return {
+		phoneNumberParsedInfo,
+		internationalFormat: phoneNumberParsedInfo?.formatInternational(),
+	};
 };
 
 export function wait(ms: number) {

@@ -40,3 +40,22 @@
 	margin: auto;
 	border: 2px solid rgba($color: #345fff, $alpha: 0.1) !important;
 }
+
+/** Update dialog content max-width on custom breakpoints **/
+.CreateNewClientDialogContent {
+	position: relative;
+	max-width: 480px;
+	width: 90vw;
+}
+
+@media screen and (max-width: 720px) {
+	.CreateNewClientDialogContent {
+		max-width: 360px;
+	}
+}
+
+@media screen and (max-width: 460px) {
+	.CreateNewClientDialogContent {
+		max-width: 270px;
+	}
+}

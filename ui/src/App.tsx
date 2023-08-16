@@ -1,6 +1,7 @@
 import DataProvider from './store/DataProvider';
 import Clients from './pages/Clients';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import './App.css';
 
 const router = createBrowserRouter([
 	{

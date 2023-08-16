@@ -16,13 +16,13 @@ import {
 	FormHelperText,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { ChevronLeft, Close as CloseIcon } from '@mui/icons-material';
-import { includes, isEmpty, map, size, toLower } from 'lodash';
-import { isCorrectEmailFormat, isCorrectPhoneNumberFormat, wait } from '../../utils';
+import { ArrowBack, Close as CloseIcon } from '@mui/icons-material';
+import { includes, isEmpty, map, toLower } from 'lodash';
+import { getPhoneNumberMetadata, isCorrectEmailFormat, wait } from '../../utils';
 import { createClient } from '../../services/api';
 import { CreateNewClientStep, CreateNewClientStepsLabel } from '../../types';
-import './CreateNewClient.scss';
 import { ACTIONS, StateContext } from '../../store/DataProvider';
+import './CreateNewClient.scss';
 
 const CreateNewClient = () => {
 	const { state, dispatch } = useContext(StateContext);
@@ -88,10 +88,6 @@ const CreateNewClient = () => {
 			} else if (!isCorrectEmailFormat(newClientInputForm?.email)) {
 				updatedInputError = { ...updatedInputError, email: 'Invalid email format.' };
 			}
-
-			if (!isCorrectPhoneNumberFormat(newClientInputForm?.phoneNumber)) {
-				updatedInputError = { ...updatedInputError, phoneNumber: 'Invalid phone number.' };
-			}
 		}
 
 		if (!isEmpty(updatedInputError)) {
@@ -132,11 +128,23 @@ const CreateNewClient = () => {
 			return;
 		}
 
-		setSubmitted(true);
-		setErrorMessage('');
-
 		try {
 			const { firstName, lastName, phoneNumber, email } = newClientInputForm;
+			const phoneNumberMeta = getPhoneNumberMetadata(newClientInputForm?.phoneNumber);
+
+			if (!phoneNumberMeta) {
+				setInputError({ ...inputError, phoneNumber: 'Invalid phone number.' });
+				return;
+			}
+
+			const { phoneNumberParsedInfo } = phoneNumberMeta;
+			const countryCode = phoneNumberParsedInfo?.country;
+			console.log('countryCode', countryCode);
+			// we can store the phone's country code to identify client's country
+
+			setSubmitted(true);
+			setErrorMessage('');
+
 			const clientRes = await createClient({ firstName, lastName, phoneNumber, email });
 
 			// simulate load
@@ -153,7 +161,7 @@ const CreateNewClient = () => {
 
 				// toggle toast
 				setShowSuccess(true);
-				await wait(1000);
+				await wait(1_500);
 				setShowSuccess(false);
 			}
 		} catch (err: any) {
@@ -230,7 +238,7 @@ const CreateNewClient = () => {
 					)}
 				</DialogTitle>
 
-				<DialogContent style={{ width: '90vw', maxWidth: '460px' }}>
+				<DialogContent className='CreateNewClientDialogContent'>
 					<Box sx={{ width: '100%' }}>
 						<Stepper activeStep={createNewClientActiveStep}>
 							{map(CreateNewClientStepsLabel, (stepInfo) => {
@@ -240,8 +248,7 @@ const CreateNewClient = () => {
 										createNewClientActiveStep === CreateNewClientStep.ContactDetails) ||
 									(createNewClientActiveStep === CreateNewClientStep.ContactDetails &&
 										isCorrectEmailFormat(newClientInputForm?.email) &&
-										isCorrectPhoneNumberFormat(newClientInputForm?.phoneNumber) &&
-										size(newClientInputForm?.phoneNumber) > 1);
+										!isEmpty(newClientInputForm?.phoneNumber));
 
 								return (
 									<Step key={i18n} completed={completed}>
@@ -313,6 +320,7 @@ const CreateNewClient = () => {
 								<Box sx={{ width: '100%', flexDirection: 'column', marginTop: '16px' }}>
 									<p>Phone number</p>
 									<TextField
+										type='tel'
 										error={!isEmpty(inputError?.phoneNumber)}
 										helperText={inputError?.phoneNumber}
 										fullWidth
@@ -387,7 +395,7 @@ const CreateNewClient = () => {
 									}}
 									onClick={returnToPersonalDetails}
 								>
-									<ChevronLeft />
+									<ArrowBack style={{ height: '16px', width: '16px', marginRight: '4px' }} />
 									Back
 								</Button>
 
