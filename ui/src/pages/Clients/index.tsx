@@ -32,7 +32,7 @@ function Clients() {
 			</Typography>
 			<ClientActions />
 
-			<Paper sx={{ margin: 'auto', marginTop: 3 }}>
+			<Paper sx={{ margin: 'auto', marginTop: 3, marginBottom: 2 }}>
 				<ClientTable clients={clientsToDisplay} />
 			</Paper>
 		</Page>

@@ -1,13 +1,12 @@
-import { Box, TextField, Alert } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import { StyledDialog, StyledDialogActions, StyledDialogContent, StyledDialogTitle } from '../Dialog';
-import { ACTIONS, StateContext } from '../../store/DataProvider';
+import { StateContext } from '../../store/DataProvider';
 import { includes, isEmpty, map, toLower } from 'lodash';
 import { CreateNewClientStep, CreateNewClientStepsLabel, DialogEnum } from '../../types';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { createClient } from '../../services/api';
-import { getPhoneNumberMetadata, isCorrectEmailFormat, wait } from '../../utils';
+import { getPhoneNumberMetadata, isCorrectEmailFormat } from '../../utils';
 import { DialogProviderActions, DialogStateContext } from '../../store/DialogProvider';
 import {
 	styleFlexHorizontalSpaceBetween,
@@ -22,13 +21,11 @@ import CloseIconButton from '../CloseIconButton';
 import './CreateNewClientDialog.scss';
 
 const CreateNewClientDialog = () => {
-	const { state, dispatch } = useContext(StateContext);
+	const { createNewClient } = useContext(StateContext);
 
 	const { dispatch: dialogProviderDispatch } = useContext(DialogStateContext);
-	const { clients = [] } = state;
 	const [createNewClientActiveStep, setCreateNewClientActiveStep] = useState(CreateNewClientStep.PersonalDetails);
 
-	const [showSuccess, setShowSuccess] = useState(false);
 	const [submitted, setSubmitted] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 
@@ -99,24 +96,10 @@ const CreateNewClientDialog = () => {
 			setSubmitted(true);
 			setErrorMessage('');
 
-			const clientRes = await createClient({ firstName, lastName, phoneNumber, email });
+			const success = await createNewClient({ firstName, lastName, phoneNumber, email });
 
-			// simulate load
-			await wait(1_500);
-			setSubmitted(false);
-
-			if (!isEmpty(clientRes)) {
-				// success
-				// show recently created client info at top of the list
-				dispatch({ type: ACTIONS.FETCH_ALL_CLIENTS, data: [clientRes, ...clients] });
-
-				// close dialog
+			if (success) {
 				handleCreateNewClientDialogClose();
-
-				// toggle toast
-				setShowSuccess(true);
-				await wait(1_500);
-				setShowSuccess(false);
 			}
 		} catch (err: any) {
 			if (includes(toLower(err?.message as string), 'network')) {
@@ -284,12 +267,6 @@ const CreateNewClientDialog = () => {
 					</form>
 				</StyledDialogContent>
 			</StyledDialog>
-
-			{showSuccess && (
-				<Alert className='CreateNewClientSuccessAlert' severity='success' color='info'>
-					Successfully Created!
-				</Alert>
-			)}
 		</>
 	);
 };

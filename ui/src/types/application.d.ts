@@ -10,6 +10,8 @@ interface IApplicationState {
 	clients: IClient[];
 	filteredClients: IClient[];
 	showFiltered: boolean;
+	showSuccessToast: boolean;
+	toastMessage: string;
 }
 
 interface IDialogState {
