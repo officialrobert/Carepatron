@@ -3,11 +3,11 @@ import { ArrowBack } from '@mui/icons-material';
 import { StyledDialog, StyledDialogActions, StyledDialogContent, StyledDialogTitle } from '../Dialog';
 import { StateContext } from '../../store/DataProvider';
 import { includes, isEmpty, map, toLower } from 'lodash';
-import { CreateNewClientStep, CreateNewClientStepsLabel, DialogEnum } from '../../types';
+import { CreateNewClientStep, CreateNewClientStepsLabel } from '../../types';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { getPhoneNumberMetadata, isCorrectEmailFormat } from '../../utils';
-import { DialogProviderActions, DialogStateContext } from '../../store/DialogProvider';
+import { DialogStateContext } from '../../store/DialogProvider';
 import {
 	styleFlexHorizontalSpaceBetween,
 	styleFlexStartVerticalElement,
@@ -22,7 +22,7 @@ import CloseIconButton from '../CloseIconButton';
 const CreateNewClientDialog = () => {
 	const { createNewClient } = useContext(StateContext);
 
-	const { dispatch: dialogProviderDispatch } = useContext(DialogStateContext);
+	const { closeDialog } = useContext(DialogStateContext);
 	const [createNewClientActiveStep, setCreateNewClientActiveStep] = useState(CreateNewClientStep.PersonalDetails);
 
 	const [submitted, setSubmitted] = useState(false);
@@ -42,8 +42,7 @@ const CreateNewClientDialog = () => {
 			return;
 		}
 
-		dialogProviderDispatch({ type: DialogProviderActions.SHOW_DIALOG, data: false });
-		dialogProviderDispatch({ type: DialogProviderActions.SHOW_DIALOG_TYPE, data: DialogEnum.None });
+		closeDialog();
 
 		setErrorMessage('');
 		setCreateNewClientActiveStep(CreateNewClientStep.PersonalDetails);
