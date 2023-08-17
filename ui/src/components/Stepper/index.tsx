@@ -60,10 +60,13 @@ export const StyledStepLabel = (
 };
 
 const Stepper = (props: StepperProps & { steps: StepperStepsProps; className?: string }) => {
-	const { activeStep, steps } = props;
+	const { activeStep, steps, className } = props;
 
 	return (
-		<StyledStepper activeStep={activeStep}>
+		<StyledStepper
+			activeStep={activeStep}
+			className={cx({ [`${className}`]: isString(className) && !isEmpty(className) })}
+		>
 			{map(steps, (stepInfo) => {
 				const { i18n, step, completed } = stepInfo;
 				const isActive = activeStep === step;
