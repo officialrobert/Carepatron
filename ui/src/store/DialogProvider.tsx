@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useReducer } from 'react';
 import { DialogEnum } from '../types';
-import CreateNewClientDialog from '../components/CreateNewClientDialog';
+import CreateNewClientDialog from '../components/Dialog/CreateNewClientDialog';
 
 export const DialogStateContext = createContext<{
 	state: IDialogState;

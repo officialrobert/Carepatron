@@ -8,15 +8,5 @@ export const CreateNewClientStepsLabel = [
 	{ step: 1, i18n: 'Contact details' },
 ];
 
-export enum DialogEnum {
-	'None' = 'None',
-	'CreateNewClient' = 'CreateNewClient',
-}
-
-export enum ToastEnum {
-	'none' = 'none',
-	'success' = 'success',
-	'error' = 'error',
-	'info' = 'info',
-	'warning' = 'warning',
-}
+export * from './dialog';
+export * from './toast';

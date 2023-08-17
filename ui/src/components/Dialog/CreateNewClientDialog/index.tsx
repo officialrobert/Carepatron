@@ -1,23 +1,23 @@
 import { Box, TextField } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { StyledDialog, StyledDialogActions, StyledDialogContent, StyledDialogTitle } from '../Dialog';
-import { StateContext } from '../../store/DataProvider';
+import { StyledDialog, StyledDialogActions, StyledDialogContent, StyledDialogTitle } from '..';
+import { StateContext } from '../../../store/DataProvider';
 import { includes, isEmpty, map, toLower } from 'lodash';
-import { CreateNewClientStep, CreateNewClientStepsLabel } from '../../types';
+import { CreateNewClientStep, CreateNewClientStepsLabel } from '../../../types';
 import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { getPhoneNumberMetadata, isCorrectEmailFormat } from '../../utils';
-import { DialogStateContext } from '../../store/DialogProvider';
+import { getPhoneNumberMetadata, isCorrectEmailFormat } from '../../../utils';
+import { DialogStateContext } from '../../../store/DialogProvider';
 import {
 	styleFlexHorizontalSpaceBetween,
 	styleFlexStartVerticalElement,
 	styleHorizontalFlexEnd,
-} from '../../constants';
-import Stepper from '../Stepper';
+} from '../../../constants';
+import Stepper from '../../Stepper';
 
-import ConfirmButton from '../ConfirmButton';
-import FormErrorMessage from '../FormErrorMessage';
-import CloseIconButton from '../CloseIconButton';
+import ConfirmButton from '../../ConfirmButton';
+import FormErrorMessage from '../../FormErrorMessage';
+import CloseIconButton from '../../CloseIconButton';
 
 const CreateNewClientDialog = () => {
 	const { createNewClient } = useContext(StateContext);
