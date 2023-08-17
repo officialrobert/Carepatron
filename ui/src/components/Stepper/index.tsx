@@ -14,6 +14,8 @@ export type StepperStepProps = {
 
 export type StepperStepsProps = StepperStepProps[];
 
+export const StepperComponentTestId = 'StepperComponentTestId';
+
 export const StyledStepper = (props: StepperProps & { className?: string; children: ReactNode }) => {
 	const { children, className } = props;
 
@@ -64,6 +66,7 @@ const Stepper = (props: StepperProps & { steps: StepperStepsProps; className?: s
 
 	return (
 		<StyledStepper
+			data-testid={StepperComponentTestId}
 			activeStep={activeStep}
 			className={cx({ [`${className}`]: isString(className) && !isEmpty(className) })}
 		>

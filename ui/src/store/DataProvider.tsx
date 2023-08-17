@@ -59,7 +59,12 @@ export default function DataProvider({ children }: { children?: ReactNode }) {
 	const [state, dispatch] = useReducer(reducer, initialState);
 
 	const { toastMessage, showToast } = state;
-
+	
+	/**
+	 * Open toast
+	 * @param type 
+	 * @param message 
+	 */
 	const openToast = (type: ToastEnum, message: string) => {
 		dispatch({
 			type: ACTIONS.SHOW_TOAST,
@@ -71,6 +76,9 @@ export default function DataProvider({ children }: { children?: ReactNode }) {
 		});
 	};
 
+	/**
+	 * Hide toast
+	 */
 	const hideToast = () => {
 		dispatch({
 			type: ACTIONS.SHOW_TOAST,

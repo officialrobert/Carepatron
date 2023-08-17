@@ -3,6 +3,7 @@ import { IconButton } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { CSSProperties } from 'react';
 import { isEmpty, isString } from 'lodash';
+import './CloseIconButton.scss';
 
 type CloseIconButtonProps = {
 	type?: 'button' | 'submit' | 'reset' | undefined;
@@ -22,7 +23,7 @@ const CloseIconButton = (props: CloseIconButtonProps) => {
 			aria-label={ariaLabel}
 			onClick={onClick}
 			size={size || 'medium'}
-			className={cx({ [`${className}`]: isString(className) && !isEmpty(className) })}
+			className={cx('CloseIconButton', { [`${className}`]: isString(className) && !isEmpty(className) })}
 			sx={{
 				position: 'relative',
 				color: (theme) => theme.palette.grey[500],

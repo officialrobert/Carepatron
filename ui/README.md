@@ -37,3 +37,7 @@ Unit testing can be helpful in this case. You can begin by checking the `App.tes
 # Dialog / Modal
 
 Created `DialogProvider` for handling active modals
+
+# Custom Stepper Component
+
+Proceed to [**component notes**](https://github.com/officialrobert/Carepatron/tree/main/ui/src/components/Stepper)
