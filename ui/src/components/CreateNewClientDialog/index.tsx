@@ -13,7 +13,7 @@ import {
 	styleFlexStartVerticalElement,
 	styleHorizontalFlexEnd,
 } from '../../constants';
-import { StyledStep, StyledStepLabel, StyledStepper } from '../Stepper';
+import Stepper from '../Stepper';
 
 import ConfirmButton from '../ConfirmButton';
 import FormErrorMessage from '../FormErrorMessage';
@@ -123,9 +123,9 @@ const CreateNewClientDialog = () => {
 				<StyledDialogContent>
 					<form onSubmit={handleSubmit(proceedSubmit)}>
 						<Box sx={{ width: '100%' }}>
-							<StyledStepper activeStep={createNewClientActiveStep}>
-								{map(CreateNewClientStepsLabel, (stepInfo) => {
-									const { i18n, step } = stepInfo;
+							<Stepper
+								steps={map(CreateNewClientStepsLabel, (stepInfo) => {
+									const { step } = stepInfo;
 									const completed =
 										(step !== CreateNewClientStep.ContactDetails &&
 											createNewClientActiveStep === CreateNewClientStep.ContactDetails) ||
@@ -133,18 +133,10 @@ const CreateNewClientDialog = () => {
 											!isEmpty(watch('email')) &&
 											!isEmpty(watch('phoneNumber')));
 
-									return (
-										<StyledStep key={i18n} completed={completed}>
-											<StyledStepLabel
-												active={createNewClientActiveStep === step}
-												completed={completed}
-											>
-												{i18n}
-											</StyledStepLabel>
-										</StyledStep>
-									);
+									return { ...stepInfo, completed };
 								})}
-							</StyledStepper>
+								activeStep={createNewClientActiveStep}
+							/>
 						</Box>
 						<Box
 							sx={{
